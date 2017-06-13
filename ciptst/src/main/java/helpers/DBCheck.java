@@ -1,13 +1,14 @@
 package helpers;
 
+import APITasks.VKTasks;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class DBCheck {
-    public static String check(){
-        String buffer="";
+    public static Connection connect(){
         Connection connection = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -19,6 +20,14 @@ public class DBCheck {
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(0);
         }
+        return connection;
+    }
+
+    public static String check(){
+        String buffer="";
+
+        Connection connection=connect();
+
 
         buffer=" <span class=\"red\">Отсутствует!</span>";
 
@@ -30,17 +39,8 @@ public class DBCheck {
 
     public static  String showAll(){
         String buffer="";
-        Connection connection = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/persons",
-                            "postgres", "wizard");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        }
+        Connection connection = connect();
+
         if (connection!=null){
             try {
                 try {
@@ -62,7 +62,7 @@ public class DBCheck {
                             buffer+="email: " +rs.getString("email");
                         }
                         if (rs.getString("vk").length()>0){
-                            buffer+=", "+ rs.getString("vk");
+                            buffer+=", "+ VKTasks.getPhoto(rs.getString("vk")) ;
                         }
                         buffer+=". ";
 

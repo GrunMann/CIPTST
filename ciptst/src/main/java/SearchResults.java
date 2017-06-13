@@ -1,3 +1,5 @@
+import helpers.DBCheck;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,17 +39,8 @@ public class SearchResults  extends HttpServlet {
         resp.getWriter().println("<!DOCTYPE HTML>");
         resp.getWriter().println("<html><body> <a href=\"/\"> На главную страницу</a><br/><p> Ищем "+buffer+" </p>");
 
-        Connection connection = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/persons",
-                            "postgres", "wizard");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        }
+        Connection connection = DBCheck.connect();
+
         try {
             try {
                 Statement stmt = connection.createStatement();

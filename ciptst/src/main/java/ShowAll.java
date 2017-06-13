@@ -1,3 +1,4 @@
+import APITasks.VKTasks;
 import helpers.DBCheck;
 
 import javax.servlet.ServletException;
