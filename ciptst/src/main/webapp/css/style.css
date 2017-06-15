@@ -9,3 +9,23 @@ body {
 .green{
 	color: green;
 }
+.searchResult{
+	width:500px;
+	clear: left;
+	margin: 10px;
+	padding: 10px;
+}
+.searchResult span{
+	display:block ;
+	font-size: 11pt;
+}
+.searchResult .name{
+	font-size: 18pt;
+	min-width: 100px;
+	height: 100px;
+	background: #6287ae no-repeat left top ;
+	color: white;
+	float: left;
+	margin-right: 5px;
+
+}

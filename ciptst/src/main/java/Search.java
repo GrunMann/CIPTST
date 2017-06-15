@@ -12,7 +12,7 @@ public class Search extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");
         resp.getWriter().println("<!DOCTYPE HTML>");
-        resp.getWriter().println("<html><link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\">");
+        resp.getWriter().println("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\"></head>");
         resp.getWriter().println("<body><p>Для добавления новой записи<a href=\"/\"> перейдите на главную страницу</a> и введите данные.</p>");
         resp.getWriter().println(DBCheck.check());
         resp.getWriter().println("<p>Для поиска заполниет форму:</p>");

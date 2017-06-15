@@ -57,14 +57,19 @@ public class DBCheck {
                             phoneList+="tel."+i+": "+phones.getString("phone")+", ";
                             i+=1;
                         }
-                        buffer+="<p>"+"Contact: "+ rs.getString("name")+" : "+phoneList;
+                        buffer+="<div class=\"searchResult\">"+
+                                "<span class=\"name\" style=\"background-image: url("+
+                                VKTasks.getPhoto(rs.getString("vk"))+");\">"+
+                                rs.getString("name")+"</span>"+
+                                "<span class=\"tel\">"+phoneList+
+                                "</span>";
                         if (rs.getString("email").length()>0){
-                            buffer+="email: " +rs.getString("email");
+                            buffer+="<span class=\"email\">"+" email: "+rs.getString("email") +"</span>";
                         }
                         if (rs.getString("vk").length()>0){
-                            buffer+=", "+ VKTasks.getPhoto(rs.getString("vk")) ;
+                            buffer+="<span class=\"vk\">"+" vk: "+rs.getString("vk") +"</span>" ;
                         }
-                        buffer+=". ";
+                        buffer+="</div>";
 
                     }
                     rs.close();
@@ -79,4 +84,5 @@ public class DBCheck {
         }
         return (buffer);
     }
+
 }

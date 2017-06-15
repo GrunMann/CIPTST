@@ -1,3 +1,4 @@
+import APITasks.VKTasks;
 import helpers.DBCheck;
 
 import javax.servlet.ServletException;
@@ -26,34 +27,46 @@ public class SearchResults  extends HttpServlet {
         String phone = (String) req.getParameter("phone");
         String email = (String) req.getParameter("email");
         String vk = (String) req.getParameter("vk");
-        String buffer="SELECT person.*, phone.* FROM person, phone WHERE ";
-
+        //String buffer="SELECT person.*, phone.* FROM person, phone WHERE ";
+        String buffer="SELECT person.* FROM person WHERE ";
         if (name.length()>0)buffer+="person.name='"+name+"' AND ";
-        if (phone.length()>0)buffer+="phone.phone='"+phone+"' AND ";
         if (email.length()>0)buffer+="person.email='"+email+"' AND ";
         if (vk.length()>0) buffer+="person.vk='"+vk+"' AND ";
-        buffer+="person.id=phone.personid";
+        buffer+=" person.id>0";
+
 
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");
         resp.getWriter().println("<!DOCTYPE HTML>");
-        resp.getWriter().println("<html><body> <a href=\"/\"> На главную страницу</a><br/><p> Ищем "+buffer+" </p>");
-
+        resp.getWriter().println("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\"></head><body> ");
+        resp.getWriter().println("<a href=\"/\"> На главную страницу</a><br/>");
+        
         Connection connection = DBCheck.connect();
 
         try {
             try {
                 Statement stmt = connection.createStatement();
+                Statement stmt2 = connection.createStatement();
                 ResultSet searchResults = stmt.executeQuery(buffer);
-
                 while (searchResults.next()){
-                    resp.getWriter().println("<p> Name "+searchResults.getString("name") +
-                            ", tel.: "+searchResults.getString("phone") +
-                            ", email: "+searchResults.getString("email") +
-                            ", vk: "+searchResults.getString("vk") +
-                            "</p>");
+                    ResultSet phones = stmt2.executeQuery("SELECT phone.* " +
+                            "FROM phone " +
+                            "WHERE phone.personid="+searchResults.getString("id"));
+                    int i=1;
+                    String phoneList="";
+                    while (phones.next()){
+                        phoneList+="tel."+i+": "+phones.getString("phone")+", ";
+                        i+=1;
+                    }
+                    resp.getWriter().println("<div class=\"searchResult\">"+
+                            "<span class=\"name\" style=\"background-image: url("+
+                            VKTasks.getPhoto(searchResults.getString("vk"))+
+                            ");\">"+searchResults.getString("name") +"</span>"+
+                            "<span class=\"tel\">"+phoneList+"</span>"+
+                            "<span class=\"email\">"+" email: "+searchResults.getString("email") +"</span>"+
+                            "<span class=\"vk\">"+" vk: "+searchResults.getString("vk") +"</span>"+
+                            "</div>");
                 }
-
                 stmt.close();
             } finally {
                 connection.close();
